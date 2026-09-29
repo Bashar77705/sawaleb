@@ -1,0 +1,1 @@
+{"routes":[{"path":"/","title":"الملخص"},{"path":"/?view=upload","title":"استيراد البيانات"},{"path":"/?view=insights","title":"التوصيات"},{"path":"/?view=about","title":"عن الأداة"}]}

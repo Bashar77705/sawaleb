@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="تحليل أصناف سوالب الفروع — لوحة تحليل ملفات Excel وCSV محليًا بأمان." />
+  <title>تحليلي | تحليل أصناف سوالب الفروع</title>
+  <link rel="icon" href="logo.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand"><span class="brand-mark">≈</span><div><strong>تحليلي</strong><small>سوالب الفروع</small></div></div>
+    <nav>
+      <button class="nav-item active" data-view="dashboard"><span>⌂</span> الملخص</button>
+      <button class="nav-item" data-view="upload"><span>⇧</span> استيراد البيانات</button>
+      <button class="nav-item" data-view="insights"><span>✦</span> التوصيات</button>
+      <button class="nav-item" data-view="about"><span>ⓘ</span> عن الأداة</button>
+    </nav>
+    <div class="privacy-card"><span class="lock">✓</span><div><b>محلي وآمن</b><p>ملفاتك لا تغادر جهازك.</p></div></div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><p class="eyebrow">لوحة التحليل التشغيلية</p><h1>تحليل أصناف سوالب الفروع</h1></div><div class="top-actions"><span class="status-dot"></span><span>جاهز للتحليل</span><button id="resetBtn" class="ghost-btn">إعادة ضبط</button></div></header>
+
+    <section id="view-dashboard" class="view active-view">
+      <div class="hero-card"><div><span class="pill">نسخة تجريبية عملية</span><h2>حوّل ملفاتك إلى قرار أوضح.</h2><p>ارفع ملفات Excel أو CSV لأكثر من شهر، واستخرج مؤشرات الفروع والأصناف في ثوانٍ — داخل المتصفح فقط.</p><button class="primary-btn go-upload">ابدأ برفع ملف <span>←</span></button></div><div class="hero-wave"><span>↗</span><div class="wave-bars"><i></i><i></i><i></i><i></i><i></i></div></div></div>
+      <div class="kpi-grid"><article class="kpi"><span>إجمالي المبلغ</span><strong id="totalAmount">—</strong><small id="amountTrend">بانتظار البيانات</small></article><article class="kpi"><span>إجمالي الكمية</span><strong id="totalQty">—</strong><small id="qtyTrend">بانتظار البيانات</small></article><article class="kpi"><span>عدد الأصناف</span><strong id="itemCount">—</strong><small>أصناف فريدة</small></article><article class="kpi"><span>الفروع النشطة</span><strong id="branchCount">—</strong><small>ضمن الملفات المرفوعة</small></article></div>
+      <div id="emptyState" class="empty-state"><div class="empty-icon">⌁</div><h3>لا توجد بيانات بعد</h3><p>ابدأ برفع ملف Excel أو CSV، وسنكتشف الأعمدة ونبني الملخص تلقائيًا.</p><button class="secondary-btn go-upload">رفع أول ملف</button></div>
+      <div id="dataState" class="data-state hidden"><div class="section-heading"><div><p class="eyebrow">قراءة سريعة</p><h2>ملخص البيانات المرفوعة</h2></div><span id="rowCount" class="soft-badge"></span></div><div class="charts-grid"><article class="panel"><div class="panel-head"><h3>أعلى الأصناف حسب المبلغ</h3><span class="muted">Top 8</span></div><div id="barChart" class="bar-chart"></div></article><article class="panel"><div class="panel-head"><h3>توزيع المبلغ حسب الفرع</h3><span class="muted">النسبة من الإجمالي</span></div><div id="branchChart" class="branch-chart"></div></article></div><article class="panel table-panel"><div class="panel-head"><h3>البيانات المنظفة</h3><div class="filters"><select id="branchFilter"><option value="">كل الفروع</option></select><input id="itemFilter" placeholder="ابحث عن صنف..." /></div></div><div class="table-wrap"><table><thead><tr><th>الصنف</th><th>الفرع</th><th>الكمية</th><th>المبلغ</th><th>الشهر</th></tr></thead><tbody id="dataTable"></tbody></table></div></article></div>
+    </section>
+
+    <section id="view-upload" class="view"><div class="section-heading"><div><p class="eyebrow">الخطوة 01</p><h2>استيراد البيانات</h2><p class="section-sub">يمكنك رفع عدة ملفات في جلسة واحدة. يستخرج النظام الشهر من اسم الملف تلقائيًا.</p></div><span class="soft-badge">CSV · XLSX · XLS</span></div><div id="dropzone" class="dropzone"><div class="upload-icon">⇧</div><h3>اسحب ملفاتك هنا</h3><p>أو اختر ملفات من جهازك — لا يتم رفعها إلى أي خادم</p><button class="primary-btn">اختيار الملفات</button><input id="fileInput" type="file" accept=".csv,.xlsx,.xls" multiple hidden /><small>مثال: سوالب اغسطس ٢٠٢٦.xlsx ← 2026-08</small></div><div id="fileList" class="file-list"></div><div class="mapping-note"><span>ⓘ</span><div><b>كيف نتعامل مع البيانات؟</b><p>نكتشف أسماء الأعمدة القريبة من: الصنف، الفرع، الكمية، والمبلغ. إذا لم نجد عمودًا واضحًا، نعرض تنبيهًا بدل تخمين صامت.</p></div></div></section>
+
+    <section id="view-insights" class="view"><div class="section-heading"><div><p class="eyebrow">الخطوة 03</p><h2>التوصيات المدعومة بالأرقام</h2><p class="section-sub">تتغير التوصيات حسب الملفات والفلاتر الحالية.</p></div></div><div id="insightsList" class="insights-list"><div class="empty-state compact"><div class="empty-icon">✦</div><h3>ارفع بيانات لتظهر التوصيات</h3><p>سنحوّل المؤشرات إلى ملاحظات عملية قابلة للمتابعة.</p></div></div></section>
+
+    <section id="view-about" class="view"><div class="about-card"><span class="pill">عن تحليلي</span><h2>قرارات أفضل من نفس ملفاتك.</h2><p>تحليلي أداة خفيفة لتحليل أصناف سوالب الفروع، صممت لتبدأ بسرعة وتبقى واضحة. الإصدار الحالي يعمل محليًا داخل المتصفح، وهو مناسب للبيانات التي تريد إبقاءها على جهازك.</p><div class="about-grid"><div><b>خصوصية افتراضية</b><p>لا توجد قاعدة بيانات أو API في هذه النسخة. تتم المعالجة في الذاكرة داخل متصفحك.</p></div><div><b>قابل للتوسع</b><p>يمكن إضافة Backend آمن لاحقًا للمستخدمين، الصلاحيات، الروابط المؤقتة، والتقارير.</p></div></div></div></section>
+  </main>
+  <div id="toast" class="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>
